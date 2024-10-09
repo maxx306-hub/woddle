@@ -11,7 +11,7 @@ interface AdCardProps {
   onPress: () => void;
 }
 
-const AdCard: React.FC<AdCardProps> = ({image, onPress}) => {
+const AdCard: React.FC<AdCardProps> = ({ image, onPress }) => {
   return (
     <TouchableOpacity
       style={styles.container}

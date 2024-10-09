@@ -1,28 +1,11 @@
 import React from 'react';
-import {View, Image, Text, StyleSheet, ImageSourcePropType} from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
 import MaleGenderIcon from '../../../assets/icons/MaleGenderIcon';
 import FemaleGenderIcon from '../../../assets/icons/FemaleGenderIcon';
+import { SlideItem } from '../../lib/types';
+import { calculateAge } from '../../utils';
 
-interface MainCardProps {
-  image: ImageSourcePropType;
-  name: string;
-  birthday: Date;
-  gender: 'male' | 'female' | 'other';
-}
-
-const MainCard: React.FC<MainCardProps> = ({image, name, birthday, gender}) => {
-  const calculateAge = (birthDate: Date) => {
-    const today = new Date();
-    const yearsDiff = today.getFullYear() - birthDate.getFullYear();
-    const monthsDiff = today.getMonth() - birthDate.getMonth();
-    const totalMonths = yearsDiff * 12 + monthsDiff;
-
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-
-    return `${years}y ${months}m`;
-  };
-
+const MainCard: React.FC<SlideItem> = ({ image, name, birthday, gender }) => {
   return (
     <View style={styles.card}>
       <Image source={image} style={styles.image} />
@@ -72,6 +55,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
     marginBottom: 3,
+    lineHeight: 17,
   },
   ageGenderContainer: {
     flexDirection: 'row',

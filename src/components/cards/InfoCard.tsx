@@ -1,21 +1,15 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { InfoCard as InfoCardType } from '../../lib/types';
 
-interface InfoCardProps {
-  title: string;
-  mainText: string;
-  time: string;
-  background: string;
-}
-
-const InfoCard: React.FC<InfoCardProps> = ({
+const InfoCard: React.FC<InfoCardType> = ({
   title,
   mainText,
   time,
   background,
 }) => {
   return (
-    <View style={[styles.card, {backgroundColor: background}]}>
+    <View style={[styles.card, { backgroundColor: background }]}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.mainText}>{mainText}</Text>
       <Text style={styles.time}>{time}</Text>

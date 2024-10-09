@@ -1,13 +1,16 @@
 import * as React from 'react';
-import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './src/screens/Home.tsx';
 import HomeTabIcon from './assets/icons/HomeTabIcon';
 import LogoTabIcon from './assets/icons/LogoTabIcon';
 import MoreIcon from './assets/icons/MoreIcon';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 const Tab = createBottomTabNavigator();
+const queryClient = new QueryClient();
 
 const CustomTabBar = ({
   state,
@@ -63,23 +66,25 @@ const CustomTabBar = ({
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <Tab.Navigator
-          tabBar={CustomTabBar}
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen
-            name="Logo"
-            component={HomeScreen}
-            options={{tabBarButton: () => null}}
-          />
-          <Tab.Screen name="More" component={HomeScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer>
+          <Tab.Navigator
+            tabBar={CustomTabBar}
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen
+              name="Logo"
+              component={HomeScreen}
+              options={{ tabBarButton: () => null }}
+            />
+            <Tab.Screen name="More" component={HomeScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </QueryClientProvider>
   );
 }
 

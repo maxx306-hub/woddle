@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {SvgProps, Circle, Path} from 'react-native-svg';
+import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 const CircleArrowIcon = (props: SvgProps) => (
   <Svg width={32} height={32} fill="none" {...props}>
     <Circle cx={16} cy={16} r={15.5} stroke="#000" />

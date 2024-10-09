@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {SvgProps, Path} from 'react-native-svg';
+import Svg, { SvgProps, Path } from 'react-native-svg';
 const HomeTabIcon = (props: SvgProps) => (
   <Svg width={32} height={32} fill="none" {...props}>
     <Path

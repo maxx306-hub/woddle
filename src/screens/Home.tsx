@@ -7,31 +7,41 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  ActivityIndicator,
 } from 'react-native';
 import HomeHeader from '../components/header/HomeHeader';
 import MainCard from '../components/cards/MainCard';
-import InfoCard from '../components/cards/InfoCard';
 import AdCard from '../components/cards/AdCard';
 import ActionCard from '../components/cards/ActionCard';
-const {width} = Dimensions.get('window');
+import { useQuery } from '@tanstack/react-query';
+import { InfoCard as InfoCardType, SlideItem } from '../lib/types';
+import { fetchCards, fetchSlideItems } from '../lib/api';
+import InfoCard from '../components/cards/InfoCard';
+
+const { width } = Dimensions.get('window');
 
 function HomeScreen() {
+  const { data: infoCards, isLoading: isLoadingInfoCards } = useQuery<
+    InfoCardType[],
+    Error
+  >({
+    queryKey: ['infoCards'],
+    queryFn: fetchCards,
+  });
+
+  const { data: slideItems, isLoading: isLoadingSlideItems } = useQuery<
+    SlideItem[],
+    Error
+  >({
+    queryKey: ['slideItems'],
+    queryFn: fetchSlideItems,
+  });
+
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isSwipping, setIsSwipping] = React.useState(false);
-  const data = [
-    {
-      image: require('../../assets/images/people1.png'),
-      name: 'John Doe',
-      birthday: new Date(2022, 1, 1),
-      gender: 'male',
-    },
-    {
-      image: require('../../assets/images/people2.png'),
-      name: 'Jane Smith',
-      birthday: new Date(1985, 5, 15),
-      gender: 'female',
-    },
-  ] as const;
+
+  const handleScrollState = (swipeStatus: boolean) =>
+    setIsSwipping(swipeStatus);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = event.nativeEvent.contentOffset.x;
@@ -39,14 +49,18 @@ function HomeScreen() {
     setActiveIndex(currentIndex);
   };
 
+  if (isLoadingInfoCards || isLoadingSlideItems) {
+    return <ActivityIndicator size="large" color="#000" style={styles.loader}/>;
+  }
+
   return (
     <View style={styles.container}>
       <HomeHeader />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.sliderContainer}>
           <FlatList
-            data={data}
-            renderItem={({item}) => (
+            data={slideItems}
+            renderItem={({ item }) => (
               <View
                 style={[
                   styles.cardContainer,
@@ -61,9 +75,9 @@ function HomeScreen() {
               </View>
             )}
             onScroll={onScroll}
-            onScrollBeginDrag={() => setIsSwipping(true)}
-            onScrollEndDrag={() => setIsSwipping(false)}
-            keyExtractor={(item, index) => index.toString()}
+            onScrollBeginDrag={() => handleScrollState(true)}
+            onScrollEndDrag={() => handleScrollState(false)}
+            keyExtractor={item => item.name}
             horizontal
             showsHorizontalScrollIndicator={false}
             snapToAlignment="center"
@@ -71,7 +85,7 @@ function HomeScreen() {
             decelerationRate="fast"
           />
           <View style={styles.dotsContainer}>
-            {data.map((_, index) => (
+            {slideItems?.map((_, index) => (
               <View
                 key={index}
                 style={[
@@ -82,36 +96,16 @@ function HomeScreen() {
             ))}
           </View>
         </View>
-        <View style={styles.infoCardsContainer}>
-          <View style={styles.infoCardRow}>
-            <InfoCard
-              title="Weight"
-              mainText={'15 lbs \n3 oz'}
-              time="1:00 PM Dec 05 2023"
-              background="#FFF5DC"
-            />
-            <InfoCard
-              title="Diaper"
-              mainText="Pee Medium"
-              time="2h 55m ago"
-              background="#EFF1FF"
-            />
-          </View>
-          <View style={styles.infoCardRow}>
-            <InfoCard
-              title="Feeding"
-              mainText="Formula 5oz"
-              time="2h 30m ago"
-              background="#FFEEE7"
-            />
-            <InfoCard
-              title="Sleep"
-              mainText="2h 20m"
-              time="5 hours ago"
-              background="#F8EEFF"
-            />
-          </View>
-        </View>
+
+        <FlatList
+          data={infoCards}
+          renderItem={({ item }) => <InfoCard {...item} />}
+          keyExtractor={item => item.time}
+          numColumns={2}
+          contentContainerStyle={styles.infoCardsContainer}
+          columnWrapperStyle={styles.infoCardRow}
+        />
+
         <AdCard
           image={require('../../assets/images/ad.png')}
           onPress={() => {}}
@@ -131,6 +125,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  loader: {
+    marginTop: '70%',
   },
   scrollViewContent: {
     flexGrow: 1,

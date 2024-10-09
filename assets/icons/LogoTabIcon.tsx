@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {SvgProps, Circle, Path} from 'react-native-svg';
+import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 const LogoTabIcon = (props: SvgProps) => (
   <Svg width={92} height={92} fill="none" {...props}>
     <Circle cx={46} cy={46} r={40} fill="#BECFDA" />

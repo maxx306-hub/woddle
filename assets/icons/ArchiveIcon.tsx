@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, {SvgProps, Path, Circle} from 'react-native-svg';
+import Svg, { SvgProps, Path, Circle } from 'react-native-svg';
 const ArchiveIcon = (props: SvgProps) => (
   <Svg width={32} height={27} fill="none" {...props}>
     <Path

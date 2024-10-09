@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Image, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import ArchiveIcon from '../../../assets/icons/ArchiveIcon';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeHeader: React.FC = () => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.container, {marginTop: insets.top}]}>
+    <View style={[styles.container, { marginTop: insets.top }]}>
       <Text style={styles.title}>Woddle</Text>
       <View style={styles.rightIcons}>
         <TouchableOpacity onPress={() => {}}>
