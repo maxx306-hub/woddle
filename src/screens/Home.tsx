@@ -8,6 +8,7 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
 import HomeHeader from '../components/header/HomeHeader';
 import MainCard from '../components/cards/MainCard';
@@ -40,8 +41,16 @@ function HomeScreen() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isSwipping, setIsSwipping] = React.useState(false);
 
-  const handleScrollState = (swipeStatus: boolean) =>
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const paddingValue = scrollX.interpolate({
+    inputRange: [0, width],
+    outputRange: [0, 15],
+    extrapolate: 'clamp',
+  });
+
+  const handleScrollState = (swipeStatus: boolean) => {
     setIsSwipping(swipeStatus);
+  };
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = event.nativeEvent.contentOffset.x;
@@ -50,7 +59,9 @@ function HomeScreen() {
   };
 
   if (isLoadingInfoCards || isLoadingSlideItems) {
-    return <ActivityIndicator size="large" color="#000" style={styles.loader}/>;
+    return (
+      <ActivityIndicator size="large" color="#000" style={styles.loader} />
+    );
   }
 
   return (
@@ -61,10 +72,10 @@ function HomeScreen() {
           <FlatList
             data={slideItems}
             renderItem={({ item }) => (
-              <View
+              <Animated.View
                 style={[
                   styles.cardContainer,
-                  isSwipping && styles.paddingDuringSwipe,
+                  isSwipping && { paddingHorizontal: paddingValue }, // Apply animated padding
                 ]}>
                 <MainCard
                   image={item.image}
@@ -72,12 +83,15 @@ function HomeScreen() {
                   birthday={item.birthday}
                   gender={item.gender}
                 />
-              </View>
+              </Animated.View>
             )}
-            onScroll={onScroll}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: false, listener: onScroll },
+            )}
             onScrollBeginDrag={() => handleScrollState(true)}
             onScrollEndDrag={() => handleScrollState(false)}
-            keyExtractor={item => item.name}
+            keyExtractor={({ name }) => name}
             horizontal
             showsHorizontalScrollIndicator={false}
             snapToAlignment="center"
@@ -147,9 +161,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: width - 40,
     paddingHorizontal: 0,
-  },
-  paddingDuringSwipe: {
-    paddingHorizontal: 10,
   },
   sliderContainer: {
     position: 'relative',

@@ -2,9 +2,9 @@ import { MOCK_INFO_CARDS, MOCK_SLIDE_ITEMS } from './mock';
 import { InfoCard, SlideItem } from './types';
 
 function mockDelay<T>(data: T, delay: number): Promise<T> {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(data), delay);
-    });
+  return new Promise(resolve => {
+    setTimeout(() => resolve(data), delay);
+  });
 }
 
 // Function to fetch info cards from the backend
