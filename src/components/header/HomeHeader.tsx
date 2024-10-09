@@ -7,9 +7,7 @@ const HomeHeader: React.FC = () => {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, {marginTop: insets.top}]}>
-      <Text style={styles.title}>
-        Woddle
-      </Text>
+      <Text style={styles.title}>Woddle</Text>
       <View style={styles.rightIcons}>
         <TouchableOpacity onPress={() => {}}>
           <ArchiveIcon width={32} height={28} />

@@ -1,14 +1,21 @@
 import * as React from 'react';
-import {View, ScrollView, StyleSheet, FlatList, Dimensions, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import HomeHeader from '../components/header/HomeHeader';
 import MainCard from '../components/cards/MainCard';
 import InfoCard from '../components/cards/InfoCard';
 import AdCard from '../components/cards/AdCard';
 import ActionCard from '../components/cards/ActionCard';
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 function HomeScreen() {
-
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isSwipping, setIsSwipping] = React.useState(false);
   const data = [
@@ -40,7 +47,11 @@ function HomeScreen() {
           <FlatList
             data={data}
             renderItem={({item}) => (
-              <View style={[styles.cardContainer, isSwipping && styles.paddingDuringSwipe]}>
+              <View
+                style={[
+                  styles.cardContainer,
+                  isSwipping && styles.paddingDuringSwipe,
+                ]}>
                 <MainCard
                   image={item.image}
                   name={item.name}

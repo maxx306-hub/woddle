@@ -16,8 +16,7 @@ const AdCard: React.FC<AdCardProps> = ({image, onPress}) => {
     <TouchableOpacity
       style={styles.container}
       onPress={onPress}
-      activeOpacity={0.8}
-    >
+      activeOpacity={0.8}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image} />
     </TouchableOpacity>
   );

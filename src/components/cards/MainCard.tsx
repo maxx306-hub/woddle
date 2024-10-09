@@ -30,8 +30,10 @@ const MainCard: React.FC<MainCardProps> = ({image, name, birthday, gender}) => {
         <View style={styles.ageGenderContainer}>
           <Text style={styles.name}>{name}</Text>
 
-         {gender === 'male' && <MaleGenderIcon style={styles.genderIcon} />}
-         {gender === 'female' && <FemaleGenderIcon style={styles.genderIcon} />}
+          {gender === 'male' && <MaleGenderIcon style={styles.genderIcon} />}
+          {gender === 'female' && (
+            <FemaleGenderIcon style={styles.genderIcon} />
+          )}
         </View>
         <Text style={styles.age}>{calculateAge(birthday)}</Text>
       </View>

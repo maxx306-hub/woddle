@@ -47,11 +47,12 @@ const CustomTabBar = ({
           <TouchableOpacity
             key={index}
             onPress={onPress}
-            style={[styles.tabItem, route.name === 'Logo' && styles.centerTab]}
-          >
+            style={[styles.tabItem, route.name === 'Logo' && styles.centerTab]}>
             <View style={styles.tabItemContent}>
               {icon}
-              <Text style={styles.tabItemText}>{route.name !== 'Logo' && route.name}</Text>
+              <Text style={styles.tabItemText}>
+                {route.name !== 'Logo' && route.name}
+              </Text>
             </View>
           </TouchableOpacity>
         );
