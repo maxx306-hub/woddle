@@ -16,7 +16,7 @@ export async function fetchCards(): Promise<InfoCard[]> {
   // 4. Handle any errors that may occur during the request or parsing process.
 
   // For now, return mock data with a delay
-  return mockDelay(MOCK_INFO_CARDS, 5000);
+  return mockDelay(MOCK_INFO_CARDS, 1000);
 }
 
 // Function to fetch slide items from the backend

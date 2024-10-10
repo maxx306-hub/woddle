@@ -9,10 +9,13 @@ const HomeHeader: React.FC = () => {
     <View style={[styles.container, { marginTop: insets.top }]}>
       <Text style={styles.title}>Woddle</Text>
       <View style={styles.rightIcons}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => {}} accessibilityLabel="Archive Open">
           <ArchiveIcon width={32} height={28} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.avatarContainer} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.avatarContainer}
+          onPress={() => {}}
+          accessibilityLabel="Avatar Open">
           <Image
             source={require('../../../assets/images/avatar.png')}
             style={styles.avatar}
@@ -28,7 +31,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
   },
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: '400',
     letterSpacing: -0.5,
+    color: 'black',
   },
   logo: {
     width: 160,

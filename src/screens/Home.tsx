@@ -14,42 +14,22 @@ import HomeHeader from '../components/header/HomeHeader';
 import MainCard from '../components/cards/MainCard';
 import AdCard from '../components/cards/AdCard';
 import ActionCard from '../components/cards/ActionCard';
-import { useQuery } from '@tanstack/react-query';
-import { InfoCard as InfoCardType, SlideItem } from '../lib/types';
-import { fetchCards, fetchSlideItems } from '../lib/api';
 import InfoCard from '../components/cards/InfoCard';
+import { useInfoCards, useSlideItems } from '../api/useHome.ts';
 
 const { width } = Dimensions.get('window');
 
 function HomeScreen() {
-  const { data: infoCards, isLoading: isLoadingInfoCards } = useQuery<
-    InfoCardType[],
-    Error
-  >({
-    queryKey: ['infoCards'],
-    queryFn: fetchCards,
-  });
-
-  const { data: slideItems, isLoading: isLoadingSlideItems } = useQuery<
-    SlideItem[],
-    Error
-  >({
-    queryKey: ['slideItems'],
-    queryFn: fetchSlideItems,
-  });
+  const { data: infoCards, isLoading: isLoadingInfoCards } = useInfoCards();
+  const { data: slideItems, isLoading: isLoadingSlideItems } = useSlideItems();
 
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const [isSwipping, setIsSwipping] = React.useState(false);
+  const [isSwapping, setIsSwapping] = React.useState(false);
 
   const scrollX = React.useRef(new Animated.Value(0)).current;
-  const paddingValue = scrollX.interpolate({
-    inputRange: [0, width],
-    outputRange: [0, 15],
-    extrapolate: 'clamp',
-  });
 
   const handleScrollState = (swipeStatus: boolean) => {
-    setIsSwipping(swipeStatus);
+    setIsSwapping(swipeStatus);
   };
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -75,7 +55,7 @@ function HomeScreen() {
               <Animated.View
                 style={[
                   styles.cardContainer,
-                  isSwipping && { paddingHorizontal: paddingValue }, // Apply animated padding
+                  isSwapping && { paddingHorizontal: 5 },
                 ]}>
                 <MainCard
                   image={item.image}
@@ -111,14 +91,29 @@ function HomeScreen() {
           </View>
         </View>
 
-        <FlatList
-          data={infoCards}
-          renderItem={({ item }) => <InfoCard {...item} />}
-          keyExtractor={item => item.time}
-          numColumns={2}
-          contentContainerStyle={styles.infoCardsContainer}
-          columnWrapperStyle={styles.infoCardRow}
-        />
+        <View style={styles.infoCardsContainer}>
+          {infoCards
+            ?.reduce<(typeof infoCards)[number][][]>((rows, card, index) => {
+              if (index % 2 === 0) {
+                rows.push([]);
+              }
+              rows[rows.length - 1].push(card);
+              return rows;
+            }, [])
+            .map((row, rowIndex) => (
+              <View key={`row-${rowIndex}`} style={styles.infoCardRow}>
+                {row.map((card, cardIndex) => (
+                  <InfoCard
+                    key={`card-${rowIndex}-${cardIndex}`}
+                    title={card.title}
+                    mainText={card.mainText}
+                    time={card.time}
+                    background={card.background}
+                  />
+                ))}
+              </View>
+            ))}
+        </View>
 
         <AdCard
           image={require('../../assets/images/ad.png')}
@@ -148,6 +143,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 60,
     backgroundColor: 'white',
+    marginTop: 12,
   },
   infoCardsContainer: {
     paddingVertical: 20,
